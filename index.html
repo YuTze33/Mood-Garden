@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心情植物園 Mood Garden</title>
+<style>
+:root{--ink:#263b32;--muted:#708177;--cream:#fbf8ef;--green:#537b61;--mint:#e8f0e5;--pink:#f5dce0;--yellow:#f4e8b9;--lav:#e7e0f4;--card:#fffdf8}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:ui-rounded,"Noto Sans TC","Microsoft JhengHei",sans-serif}
+header{padding:24px 6vw;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e8e5d9}
+.logo{font-weight:900;font-size:1.25rem;letter-spacing:.03em}.logo span{font-size:1.5rem;margin-right:8px}
+header small{color:var(--muted)}main{max-width:1100px;margin:auto;padding:42px 22px 64px}
+.hero{text-align:center;margin-bottom:34px}.eyebrow{display:inline-block;background:#e5eddf;color:#46664e;border-radius:99px;padding:7px 14px;font-size:.85rem;font-weight:700}
+h1{font-size:clamp(2rem,5vw,3.4rem);margin:15px 0 10px;letter-spacing:.02em}.hero p{color:var(--muted);line-height:1.8;margin:0}
+.layout{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:stretch}
+.panel{background:var(--card);border:1px solid #ece8dc;border-radius:24px;padding:26px;box-shadow:0 8px 24px #455c4110}
+.panel h2{font-size:1.18rem;margin:0 0 8px}.sub{font-size:.9rem;color:var(--muted);margin:0 0 20px}
+.moods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mood{border:2px solid transparent;border-radius:17px;padding:15px 5px;background:#f5f2e8;cursor:pointer;transition:.18s;color:var(--ink);font:inherit}
+.mood .emoji{display:block;font-size:2rem;margin-bottom:7px}.mood strong{font-size:.94rem}.mood:hover{transform:translateY(-2px)}.mood.active{border-color:var(--green);background:var(--mint);box-shadow:0 0 0 3px #537b6115}
+label{display:block;font-weight:700;font-size:.9rem;margin:20px 0 8px}textarea,input{font:inherit;width:100%;border:1px solid #deded2;border-radius:13px;background:#fffefb;padding:12px 14px;color:var(--ink);outline:none}textarea{resize:vertical;min-height:84px}textarea:focus,input:focus{border-color:var(--green);box-shadow:0 0 0 3px #537b6118}
+.btn{border:0;border-radius:13px;padding:13px 18px;font:inherit;font-weight:800;cursor:pointer;transition:.18s}.btn:hover{transform:translateY(-1px)}.primary{background:var(--green);color:white;width:100%;margin-top:17px}.secondary{background:#e9efe5;color:#3e6147}.danger{background:#f8e8e8;color:#934c4c}
+.garden{background:linear-gradient(160deg,#f1f4e8,#e5eee3);position:relative;overflow:hidden;min-height:280px;border-radius:20px;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px;margin:14px 0 18px}
+.sun{position:absolute;top:22px;right:26px;width:46px;height:46px;background:#f3d98b;border-radius:50%;opacity:.85}.cloud{position:absolute;top:45px;left:25px;font-size:2.2rem;opacity:.55}
+.plant{font-size:7rem;line-height:1.2;filter:drop-shadow(0 8px 5px #3d5b2a18);transition:transform .3s}.plant.pop{transform:scale(1.12) rotate(-3deg)}.plant-caption{font-weight:800;margin-top:6px}.plant-message{font-size:.9rem;color:#607767;margin-top:5px;text-align:center}
+.progress-wrap{background:#d9e3d4;height:9px;border-radius:99px;overflow:hidden;margin:8px 0}.progress{height:100%;background:#6b946c;width:0%;transition:width .35s}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:#fffdf8;border:1px solid #e6e9dd;border-radius:15px;text-align:center;padding:12px 5px}.stat b{display:block;font-size:1.35rem}.stat span{font-size:.78rem;color:var(--muted)}
+.history{margin-top:24px}.history-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.history-head h2{margin:0}.history-list{display:grid;gap:10px}.entry{display:flex;gap:12px;align-items:flex-start;background:#fffdf8;border:1px solid #ece8dc;padding:13px 15px;border-radius:15px}.entry .eemoji{font-size:1.55rem}.entry strong{display:block}.entry p{margin:4px 0 0;color:var(--muted);font-size:.88rem;overflow-wrap:anywhere}.entry time{margin-left:auto;white-space:nowrap;color:#8b968b;font-size:.75rem}.empty{text-align:center;color:var(--muted);padding:22px;border:1px dashed #d9dfd2;border-radius:15px}
+footer{text-align:center;color:#8b968b;font-size:.8rem;padding:0 20px 28px}.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;background:#263b32;color:white;padding:12px 18px;border-radius:99px;transition:.25s;pointer-events:none;box-shadow:0 8px 25px #0002}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:760px){header{padding:18px 5vw}.layout{grid-template-columns:1fr}main{padding-top:28px}.panel{padding:20px}.garden{min-height:250px}.moods{gap:7px}.mood{padding:12px 3px}.mood .emoji{font-size:1.7rem}.entry time{display:none}}
+</style>
+</head>
+<body>
+<header><div class="logo"><span>🌿</span>心情植物園</div><small>給心情一點陽光</small></header>
+<main>
+<section class="hero">
+<div class="eyebrow">✦ YOUR LITTLE SAFE SPACE ✦</div>
+<h1>今天的你，過得好嗎？</h1>
+<p>每一種心情都值得被好好照顧。<br>選一種感受，種下今天的自己。</p>
+</section>
+<div class="layout">
+<section class="panel">
+<h2>🌤️ 今天的心情</h2><p class="sub">沒有對錯，選擇最接近你現在感受的那一個。</p>
+<div class="moods" id="moods">
+<button class="mood" data-mood="開心" data-emoji="😊" data-plant="🌻"><span class="emoji">😊</span><strong>開心</strong></button>
+<button class="mood" data-mood="平靜" data-emoji="😌" data-plant="🌿"><span class="emoji">😌</span><strong>平靜</strong></button>
+<button class="mood" data-mood="有點累" data-emoji="😴" data-plant="🌱"><span class="emoji">😴</span><strong>有點累</strong></button>
+<button class="mood" data-mood="難過" data-emoji="🥺" data-plant="🌷"><span class="emoji">🥺</span><strong>難過</strong></button>
+<button class="mood" data-mood="焦慮" data-emoji="😵‍💫" data-plant="🪴"><span class="emoji">😵‍💫</span><strong>焦慮</strong></button>
+<button class="mood" data-mood="充滿期待" data-emoji="🤩" data-plant="🌸"><span class="emoji">🤩</span><strong>充滿期待</strong></button>
+</div>
+<label for="note">📝 留一句話給今天的自己（選填）</label>
+<textarea id="note" maxlength="180" placeholder="例如：今天完成了一件小事，替自己開心……"></textarea>
+<button class="btn primary" id="saveBtn">🌱 種下今天的心情</button>
+</section>
+<section class="panel">
+<h2>🪴 你的專屬小花園</h2><p class="sub">每天照顧自己的心情，花園就會慢慢長大。</p>
+<div class="garden"><div class="sun"></div><div class="cloud">☁️</div><div class="plant" id="plant">🌱</div><div class="plant-caption" id="plantCaption">一顆等待照顧的小種子</div><div class="plant-message" id="plantMessage">選擇心情，讓花園認識今天的你。</div></div>
+<div style="display:flex;justify-content:space-between;font-size:.85rem"><strong>🌿 花園成長度</strong><span id="progressLabel">0 / 7 天</span></div><div class="progress-wrap"><div class="progress" id="progress"></div></div>
+<div class="stats"><div class="stat"><b id="total">0</b><span>累積紀錄</span></div><div class="stat"><b id="streak">0</b><span>連續天數</span></div><div class="stat"><b id="variety">0</b><span>探索心情</span></div></div>
+</section>
+</div>
+<section class="history">
+<div class="history-head"><h2>📖 心情日記</h2><button class="btn secondary" id="clearBtn" style="padding:9px 13px;font-size:.83rem">清除紀錄</button></div>
+<div class="history-list" id="historyList"><div class="empty">你的第一篇心情日記，正在等你寫下 ✨</div></div>
+</section>
+</main>
+<footer>Made with care ♡ 每一種心情，都值得一個位置。</footer>
+<div class="toast" id="toast">已種下今天的心情 🌱</div>
+<script>
+const KEY='moodGardenEntriesV1';
+const moods=[...document.querySelectorAll('.mood')];
+let selected=null;
+let entries=loadEntries();
+function loadEntries(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(entries))}
+function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+moods.forEach(btn=>btn.addEventListener('click',()=>{
+ selected=btn.dataset.mood;moods.forEach(b=>b.classList.toggle('active',b===btn));
+ document.getElementById('plant').textContent=btn.dataset.plant;
+ document.getElementById('plantCaption').textContent=`今天的你：${selected}`;
+ const messages={'開心':'把這份好心情分享出去，也留一點給自己。','平靜':'慢慢呼吸，你正在自己的節奏裡。','有點累':'休息不是偷懶，你也值得被溫柔對待。','難過':'不用急著好起來，先陪伴現在的自己。','焦慮':'一次只做一小步，就已經很棒了。','充滿期待':'帶著好奇出發，新的可能正在發芽。'};
+ document.getElementById('plantMessage').textContent=messages[selected];
+}));
+document.getElementById('saveBtn').addEventListener('click',()=>{
+ if(!selected){showToast('先選一種今天的心情吧 🌼');return}
+ const note=document.getElementById('note').value.trim();
+ const entry={date:today(),mood:selected,emoji:moods.find(b=>b.dataset.mood===selected).dataset.emoji,plant:moods.find(b=>b.dataset.mood===selected).dataset.plant,note,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})};
+ const idx=entries.findIndex(e=>e.date===today());
+ if(idx>=0){entries[idx]=entry;showToast('已更新今天的心情紀錄 ✨')}else{entries.unshift(entry);showToast('已種下今天的心情 🌱')}
+ entries.sort((a,b)=>b.date.localeCompare(a.date));persist();render();document.getElementById('note').value='';
+});
+function streakCount(){const dates=new Set(entries.map(e=>e.date));let d=new Date(),count=0;while(true){const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;if(!dates.has(key))break;count++;d.setDate(d.getDate()-1)}return count}
+function render(){
+ document.getElementById('total').textContent=entries.length;
+ document.getElementById('streak').textContent=streakCount();
+ document.getElementById('variety').textContent=new Set(entries.map(e=>e.mood)).size;
+ const days=Math.min(entries.length,7);document.getElementById('progressLabel').textContent=`${days} / 7 天`;document.getElementById('progress').style.width=`${days/7*100}%`;
+ const list=document.getElementById('historyList');
+ if(!entries.length){list.innerHTML='<div class="empty">你的第一篇心情日記，正在等你寫下 ✨</div>';document.getElementById('plant').textContent='🌱';document.getElementById('plantCaption').textContent='一顆等待照顧的小種子';document.getElementById('plantMessage').textContent='選擇心情，讓花園認識今天的你。';return}
+ list.innerHTML=entries.slice(0,30).map(e=>`<article class="entry"><div class="eemoji">${esc(e.emoji)}</div><div style="min-width:0;flex:1"><strong>${esc(e.mood)}</strong><p>${esc(e.note||'今天沒有留下文字，心情也被好好記住了。')}</p></div><time>${esc(e.date)}</time></article>`).join('');
+ const latest=entries[0];const btn=moods.find(b=>b.dataset.mood===latest.mood);
+ if(btn){document.getElementById('plant').textContent=latest.plant;document.getElementById('plantCaption').textContent=`最近的你：${latest.mood}`;const msg={'開心':'把這份好心情分享出去，也留一點給自己。','平靜':'慢慢呼吸，你正在自己的節奏裡。','有點累':'休息不是偷懶，你也值得被溫柔對待。','難過':'不用急著好起來，先陪伴現在的自己。','焦慮':'一次只做一小步，就已經很棒了。','充滿期待':'帶著好奇出發，新的可能正在發芽。'};document.getElementById('plantMessage').textContent=msg[latest.mood]}
+}
+document.getElementById('clearBtn').addEventListener('click',()=>{if(!entries.length){showToast('目前沒有紀錄喔');return}if(confirm('確定要清除所有心情日記嗎？此操作無法復原。')){entries=[];persist();render();showToast('紀錄已清除')}})
+let toastTimer;function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2200)}
+render();
+</script>
+</body>
+</html>
